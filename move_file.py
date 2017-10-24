@@ -2,12 +2,12 @@
 
 import os, shutil, fnmatch
 
-# prefix = input()
-def add_prefix(foldername, filenames):
+
+def add_folder_prefix(foldername, filenames):
     """This function will add a prefix to the result names based on the name of the subfolder they are stored in"""
     for file in filenames:
-        if fnmatch.fnmatch(file, "*.png") or fnmatch.fnmatch(file, "*.html"):
-            dirname, basename = os.path.split(foldername)
+        if fnmatch.fnmatch(file, "*.png") or fnmatch.fnmatch(file, "*.html"):   #Only put prefix on png or html files
+            dirname, basename = os.path.split(foldername)   #split foldername to find parent folder for prefix
             new_filename = "{}_{}".format(basename,file)
             if not fnmatch.fnmatch(file, "*" + basename + "*"):
                 os.rename(foldername + "\\" + file, foldername + "\\" + new_filename)
@@ -62,10 +62,10 @@ def main():
     filter_list = ["Gen1", "Gen2_p0", "Gen2_p1", "Gen3"]
     gen3_subfilter_list = ["p00", "p01", "p02", "p03", "p04", "p05", "p06", "p07", "p08", "p09", "p10"]
 
-    make_dir_bins(dir_list, gen3_subdir_list)
+    make_dir_bins(dir_list, gen3_subdir_list)   #Create "Comparison" folder and subfolders
 
     for foldername, subfolders, filenames in os.walk(os.getcwd()):
-        add_prefix(foldername, filenames)
+        add_folder_prefix(foldername, filenames)
 
     for foldername, subfolders, filenames in os.walk(os.getcwd()):
         sort_eyes(foldername, filenames, filter_list, gen3_subfilter_list, dir_list, gen3_subdir_list)
