@@ -2,15 +2,10 @@
 
 import os, shutil, fnmatch
 
-
-def add_folder_prefix(foldername, filenames):
+def add_folder_prefix(foldername, original_filename):
     """This function will add a prefix to the result names based on the name of the subfolder they are stored in"""
-    for file in filenames:
-        if fnmatch.fnmatch(file, "*.png") or fnmatch.fnmatch(file, "*.html"):   #Only put prefix on png or html files
-            dirname, basename = os.path.split(foldername)   #split foldername to find parent folder for prefix
-            new_filename = "{}_{}".format(basename,file)
-            if not fnmatch.fnmatch(file, "*" + basename + "*"):
-                os.rename(foldername + "\\" + file, foldername + "\\" + new_filename)
+    dirname, basename = os.path.split(foldername)   #split foldername to find parent folder for prefix
+    return "{}_{}".format(basename, original_filename)  #return new filename
 
 
 def make_dir_bins(dir_list, gen3_subdir_list):
@@ -32,26 +27,25 @@ def make_dir_bins(dir_list, gen3_subdir_list):
 def sort_eyes(foldername, filenames, filter_list, gen3_subfilter_list, dir_list, gen3_subdir_list):
     """Sorts *.png results based on generation and preset"""
     copy_dst = os.getcwd() + "\\Comparison\\"
+
     for file in filenames:  # Walk through filenames in the current folder
         for filter in range(len(filter_list)): #Check against each part of filter list to find generation/preset
             if fnmatch.fnmatch(file, "*" + filter_list[filter] + "*.png"):  #Search for match with current list item (eg. "Gen1", "Gen2p1")
+                newfile = add_folder_prefix(foldername, file)   # adds prefix when copying, does not change original filename
                 if filter_list[filter] == "Gen3":   # Gen3 is special case with 11 presets
                     gen3_dir = os.path.join(copy_dst, "Gen3")
-
                     for subfilter in range(len(gen3_subfilter_list)):   # Iterate through list of preset names
                         if fnmatch.fnmatch(file, "*" + gen3_subfilter_list[subfilter] + "*"):   #If matching preset name then...
                             try:
-                                shutil.copy(os.path.join(foldername, file), os.path.join(gen3_dir, gen3_subdir_list[subfilter]))    # copy to correct Gen3 preset subdirectory
+                                shutil.copy(os.path.join(foldername, file), os.path.join(gen3_dir, gen3_subdir_list[subfilter], newfile))    # copy to correct Gen3 preset subdirectory
                             except (shutil.Error, FileNotFoundError) as e:
                                 print("Failed to copy file due to error {}".format(e))
-
                 else:   #all other cases go directly to folder
                     try:
-                        shutil.copy(os.path.join(foldername, file), os.path.join(copy_dst,dir_list[filter])) #copy files over
+                        shutil.copy(os.path.join(foldername, file), os.path.join(copy_dst,dir_list[filter], newfile)) #copy files over
                     except (shutil.Error, FileNotFoundError) as e:
                         #print("Failed to copy file {}".format(os.path.join(foldername, file)))
                         print("Failed to copy file due to error {}".format(e))
-
 
 
 def main():
@@ -64,10 +58,12 @@ def main():
 
     make_dir_bins(dir_list, gen3_subdir_list)   #Create "Comparison" folder and subfolders
 
-    for foldername, subfolders, filenames in os.walk(os.getcwd()):
-        add_folder_prefix(foldername, filenames)
+    # Not needed
+    # for foldername, subfolders, filenames in os.walk(os.getcwd()):
+    #     add_folder_prefix(foldername, filenames)
 
     for foldername, subfolders, filenames in os.walk(os.getcwd()):
         sort_eyes(foldername, filenames, filter_list, gen3_subfilter_list, dir_list, gen3_subdir_list)
 
-main()
+if __name__ == '__main__':
+    main()
