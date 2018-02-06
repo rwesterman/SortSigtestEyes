@@ -1,4 +1,4 @@
-#! c:\Python\python.exe
+#! python3
 
 import os, shutil, fnmatch
 
@@ -6,7 +6,6 @@ def add_folder_prefix(foldername, original_filename):
     """This function will add a prefix to the result names based on the name of the subfolder they are stored in"""
     dirname, basename = os.path.split(foldername)   #split foldername to find parent folder for prefix
     return "{}_{}".format(basename, original_filename)  #return new filename
-
 
 def make_dir_bins(dir_list, gen3_subdir_list):
     """Creates directory bins for the sorted eyes to be copied to. Receives list of folder names to create"""
@@ -47,8 +46,9 @@ def sort_eyes(foldername, filenames, filter_list, gen3_subfilter_list, dir_list,
                         #print("Failed to copy file {}".format(os.path.join(foldername, file)))
                         print("Failed to copy file due to error {}".format(e))
 
-
 def main():
+    exclude= set(["Comparison"]) #exclude comparison folder and subfolders from os.walk
+
     # make sure dir_list and filter_list are static
     dir_list = ["Gen1", "Gen2P0", "Gen2P1", "Gen3"]  # List of top level directories
     gen3_subdir_list = ["P0", "P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10"]  # List of subdirectories under Gen3
@@ -58,11 +58,11 @@ def main():
 
     make_dir_bins(dir_list, gen3_subdir_list)   #Create "Comparison" folder and subfolders
 
-    # Not needed
-    # for foldername, subfolders, filenames in os.walk(os.getcwd()):
-    #     add_folder_prefix(foldername, filenames)
-
-    for foldername, subfolders, filenames in os.walk(os.getcwd()):
+    # making topdown=True means that any directories excluded from walk will have their subdirectories ignored as well
+    for foldername, subfolders, filenames in os.walk(os.getcwd(), topdown=True):
+        # This filters out any dirs listed in exclude and all of their subdirs
+        # subfolders[:] allows the list to be modified in place
+        subfolders[:] = [d for d in subfolders if d not in exclude]
         sort_eyes(foldername, filenames, filter_list, gen3_subfilter_list, dir_list, gen3_subdir_list)
 
 if __name__ == '__main__':
