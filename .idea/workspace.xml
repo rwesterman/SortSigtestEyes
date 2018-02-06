@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="8f1f344d-c302-47ed-87bc-0f843e46bda1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/move_file.py" afterPath="$PROJECT_DIR$/move_file.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -205,6 +204,14 @@
       <option name="presentableId" value="Default" />
       <updated>1507828229401</updated>
     </task>
+    <task id="LOCAL-00001" summary="Modified code to fix double-prefix issue. Program now modifies filename while copying rather than modifying in place.">
+      <created>1513813849953</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1513813849953</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -233,6 +240,10 @@
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Modified code to fix double-prefix issue. Program now modifies filename while copying rather than modifying in place." />
+    <option name="LAST_COMMIT_MESSAGE" value="Modified code to fix double-prefix issue. Program now modifies filename while copying rather than modifying in place." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
